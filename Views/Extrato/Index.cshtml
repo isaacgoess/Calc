@@ -1,0 +1,83 @@
+﻿@model List<Calc.Models.Classes.Parcelamento>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var Lista = ViewBag.Lista;
+    float TotalDespesas = ViewBag.TotalDespesas;
+    float TotalReceitas = ViewBag.TotalReceitas;
+    float TotalSaldos = ViewBag.totalSaldo;
+}
+<h2>Index</h2>
+<h4>Pesquisar</h4>
+<form asp-controller="Extrato" asp-action="Index" method="get">
+     <p>
+            Data de início: @Html.TextBox("buscarInicio")
+        </p>
+        <p>
+            Data de fim: @Html.TextBox("buscarFim")
+        </p>
+        <p>
+            <fieldset data-role="controlgroup">
+                <div class="col-md-10">
+                    @Html.RadioButton("Pagamento", "Todos", false) Todos
+                    @Html.RadioButton("Pagamento", "Credido", true) Crédito
+                    @Html.RadioButton("Pagamento", "Debito", false) Debito
+                </div>
+            </fieldset>
+          </p>
+        <input type="submit" value="Pesquisar" />
+ </form>
+
+<h4>Extrato</h4>
+<table class="table" style="background-color:silver">
+    <tr style="font-size: 14px">
+        <th>Total de Receitas: @Html.Raw(String.Format("R$ {0:n2}", TotalReceitas))</th>
+        <th>Total de Despesas: @Html.Raw(String.Format("R$ {0:n2}", TotalDespesas))</th>
+ 
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th>Valor</th>
+        <th>Data de Realização</th>
+        <th>Data</th>
+        <th>Tipo/Categoria</th>
+        <th>Pagamento</th>
+        <th>Saldo Parcial</th>
+    </tr>
+    @foreach (var item in Lista)
+    {
+        String color = "";
+        if (item.Tipo == 1)
+        {
+            color = "Red";
+        }
+        else
+        {
+            color = "Blue";
+        }
+    <tr style="color: @color">
+        <td>
+            @Html.Raw(String.Format("R$ {0:n2}", @item.Valor))
+        </td>
+        <td>
+            @item.DataRealizacao.ToString("dd/MM/yyyy")
+        </td>
+        <td>
+            @item.DataVencimento.ToString("dd/MM/yyyy")
+        </td>
+        <td>
+            @item.Definicao
+        </td>
+        <td>
+            @item.Pagamento
+        </td>
+        <td>
+            TotalSaldos: @Html.Raw(String.Format("R$ {0:n2}", TotalSaldos))
+        </td>
+    </tr>
+    }
+</table>
